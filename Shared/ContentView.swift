@@ -12,11 +12,12 @@ struct ContentView: View {
     
     @State private var wakeUp = defaultWakeTime
     @State private var sleepAmount = 8.0
-    @State private var coffeeAmount = 1
+    @State private var coffeeAmount = 0
     
-    @State private var alertTitle = ""
-    @State private var alertMessage = ""
-    @State private var showingAlert = false
+    @State private var alertTitle: String = ""
+    @State private var alertMessage: String = ""
+    @State private var showingAlert: Bool = false
+    private let maxCoffee: Int = 20
     
     static var defaultWakeTime: Date {
         var components = DateComponents()
@@ -29,7 +30,7 @@ struct ContentView: View {
         NavigationView {
             Form {
                 
-                VStack(alignment: .leading, spacing: 0) {
+                Section() {
                     Text("When do you want to wake up?")
                         .font(.headline)
                     DatePicker("Please enter a time",
@@ -38,7 +39,7 @@ struct ContentView: View {
                         .labelsHidden()
                 }
                 
-                VStack(alignment: .leading, spacing: 0) {
+                Section() {
                     Text("Desired amount of sleep")
                         .font(.headline)
                     Stepper("\(sleepAmount.formatted()) hours",
@@ -47,12 +48,13 @@ struct ContentView: View {
                             step: 0.25)
                 }
                 
-                VStack(alignment: .leading, spacing: 0) {
-                    Text("Daily coffe intake")
-                        .font(.headline)
-                    Stepper(coffeeAmount == 1 ? "1 cup" : "\(coffeeAmount) cups",
-                            value: $coffeeAmount,
-                            in: 1...20)
+                Section() {
+
+                    Picker("Daily coffee intake", selection: $coffeeAmount) {
+                        ForEach(1..<maxCoffee) {
+                            Text($0 == 1 ? "\($0) cup" : "\($0) cups")
+                        }
+                    }
                 }
                 
 
